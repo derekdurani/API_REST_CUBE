@@ -24,23 +24,6 @@ namespace API_REST_Northwind.Controllers
     [RoutePrefix("Northwind/v1")]
     public class NorthwindController : ApiController
     {
-        [HttpGet]
-        [Route("Test")]
-        public HttpResponseMessage Test()
-        {
-            return Request.CreateResponse(
-                HttpStatusCode.OK,
-                "Test exitoso");
-        }
-
-        [HttpPost]
-        [Route("TestPost")]
-        public HttpResponseMessage TestPost([FromBody]example s)
-        {
-            return Request.CreateResponse(
-               HttpStatusCode.OK,
-               $"Test exitoso {s.palabra}");
-        }
 
         [HttpPost]
         [Route("GetTop5Pie")]
@@ -187,22 +170,11 @@ namespace API_REST_Northwind.Controllers
         [Route("GetDimensions")]
         public HttpResponseMessage GetDimensions()
         {
-            List<dynamic> result = new List<dynamic>();
-            result.Add(new
-            {
-                value = 1,
-                label = "Cliente"
-            });
-            result.Add(new
-            {
-                value = 2,
-                label = "Empleado"
-            });
-            result.Add(new
-            {
-                value = 3,
-                label = "Producto"
-            });
+            List<string> result = new List<string>();
+            result.Add("Cliente");
+            result.Add("Empleado");
+            result.Add("Producto");
+
             return Request.CreateResponse(HttpStatusCode.OK, (object)result);
         }
 
@@ -240,7 +212,7 @@ namespace API_REST_Northwind.Controllers
 			            (        
 				            " + parameter[0] + @",
 				            [Measures].[Hec Ventas Ventas],
-				            BDESC
+				            DESC
 			            ),5
                     )
 		        ON ROWS
@@ -290,7 +262,7 @@ namespace API_REST_Northwind.Controllers
             }
                
 
-            List<dynamic> result = new List<dynamic>();
+            List<string> result = new List<string>();
 
             using (AdomdConnection cnn = new AdomdConnection(ConfigurationManager.ConnectionStrings["CuboNorthwind"].ConnectionString))
             {
@@ -299,18 +271,12 @@ namespace API_REST_Northwind.Controllers
                 {
                     using (AdomdDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                     {
-                        int i = 1;
                         while (dr.Read())
                         {
-                            result.Add(new
-                            {
-                                value = i,
-                                label = dr.GetString(0)                               
-                            });
-                            i++;
+                            result.Add(dr.GetString(0));
                         }
                         dr.Close();
-                        result = result.OrderBy(o => o.label).ToList();
+                        result = result.OrderBy(o => o).ToList();
                     }
                 }
             }
@@ -337,7 +303,7 @@ namespace API_REST_Northwind.Controllers
 		    FROM
 		    [DWH Northwind]";
 
-            List<dynamic> result = new List<dynamic>();
+            List<string> result = new List<string>();
             using (AdomdConnection cnn = new AdomdConnection(ConfigurationManager.ConnectionStrings["CuboNorthwind"].ConnectionString))
             {
                 cnn.Open();
@@ -345,17 +311,11 @@ namespace API_REST_Northwind.Controllers
                 {
                     using (AdomdDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
                     {
-                        int i = 1;
                         while (dr.Read())
                         {
-                            result.Add(new
-                            {
-                                value = i,
-                                label = dr.GetString(0)
-                            });                         
-                            i++;
+                            result.Add(dr.GetString(0));                         
                         }
-                        result = result.OrderBy(o => o.label).ToList();
+                        result = result.OrderBy(o => o).ToList();
                         dr.Close();
                     }
                 }
@@ -368,109 +328,21 @@ namespace API_REST_Northwind.Controllers
         [Route("GetDimensionYearsMonths")]
         public HttpResponseMessage GetDimensionYearsMonths()
         {
-            //      string MDX_QUERY = string.Empty;
-            //      MDX_QUERY = @"
-            //      SELECT
-            // [Measures].[Hec Ventas Ventas]
-            //    ON COLUMNS,
-            // ORDER
-            // (
-            //  [Dim Tiempo].[Mes Ingles].CHILDREN,
-            //  [Measures].[Hec Ventas Ventas],
-            //  BDESC
-            // )
-            //ON ROWS
-            //FROM
-            //[DWH Northwind]";
+            List<string> result = new List<string>();
 
-            //      List<string> labels = new List<string>();
-            //      List<int> values = new List<int>();
-            //      dynamic result = new
-            //      {
-            //          value = values,
-            //          label = labels
-            //      };
+            result.Add("Jan");
+            result.Add("Feb");
+            result.Add("Mar");
+            result.Add("Apr");
+            result.Add("May");
+            result.Add("Jun");
+            result.Add("Jul");
+            result.Add("Aug");
+            result.Add("Sep");
+            result.Add("Oct");
+            result.Add("Nov");
+            result.Add("Dec");
 
-            //      using (AdomdConnection cnn = new AdomdConnection(ConfigurationManager.ConnectionStrings["CuboNorthwind"].ConnectionString))
-            //      {
-            //          cnn.Open();
-            //          using (AdomdCommand cmd = new AdomdCommand(MDX_QUERY, cnn))
-            //          {
-            //              using (AdomdDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
-            //              {
-            //                  int i = 1;
-            //                  while (dr.Read())
-            //                  {
-            //                      values.Add(i);
-            //                      labels.Add(dr.GetString(0).Substring(0,3));
-            //                      i++;
-            //                  }
-            //                  labels.Sort();
-            //                  dr.Close();
-            //              }
-            //          }
-            //      }
-            List<dynamic> result = new List<dynamic>();
-            result.Add(new
-            {
-                value = 1,
-                label = "Jan"
-            });
-            result.Add(new
-            {
-                value = 2,
-                label = "Feb"
-            });
-            result.Add(new
-            {
-                value = 3,
-                label = "Mar"
-            });
-            result.Add(new
-            {
-                value = 4,
-                label = "Apr"
-            });
-            result.Add(new
-            {
-                value = 5,
-                label = "May"
-            });
-            result.Add(new
-            {
-                value = 6,
-                label = "Jun"
-            });
-            result.Add(new
-            {
-                value = 7,
-                label = "Jul"
-            });
-            result.Add(new
-            {
-                value = 8,
-                label = "Aug"
-            });
-            result.Add(new
-            {
-                value = 9,
-                label = "Sep"
-            });
-            result.Add(new
-            {
-                value = 10,
-                label = "Oct"
-            });
-            result.Add(new
-            {
-                value = 11,
-                label = "Nov"
-            });
-            result.Add(new
-            {
-                value = 12,
-                label = "Dic"
-            });
             return Request.CreateResponse(HttpStatusCode.OK, (object)result);
         }
     }
