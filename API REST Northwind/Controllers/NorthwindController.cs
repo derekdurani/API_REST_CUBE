@@ -243,21 +243,21 @@ namespace API_REST_Northwind.Controllers
             {
                 MDX_QUERY = @"
                     SELECT                      
-                            ([Dim Tiempo].[Anio].[" + parameter[1] + @"], 
-		                    [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])	            
+                        ([Dim Tiempo].[Anio].[" + parameter[1] + @"], 
+		                [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])	            
                         ON COLUMNS,
-		                    HEAD(
-			                    ORDER("
-                                   + parameter[0] + @",
-				                    [Measures].[Hec Ventas Ventas],
-				                    DESC
-			                    ),5
-		                    )
+		                HEAD(
+			                ORDER("
+                                + parameter[0] + @",
+				                [Measures].[Hec Ventas Ventas],
+				                DESC
+			                ),5
+		                )
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
+	                    WHERE
+                        [measures].[hec ventas ventas]
                     ";
             }
                
@@ -273,7 +273,11 @@ namespace API_REST_Northwind.Controllers
                     {
                         while (dr.Read())
                         {
-                            result.Add(dr.GetString(0));
+                            Debug.Write(dr);
+                            if  (dr.GetValue(1) == null)
+                                break;
+                            else
+                                result.Add(dr.GetString(0));
                         }
                         dr.Close();
                         result = result.OrderBy(o => o).ToList();
