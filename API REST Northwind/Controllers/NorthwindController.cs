@@ -233,12 +233,14 @@ namespace API_REST_Northwind.Controllers
             SELECT
 			    [Measures].[Hec Ventas Ventas]
 		        ON COLUMNS,
-			    ORDER
-			    (
-				    " + parameter[0] + @",
-				    [Measures].[Hec Ventas Ventas],
-				    BDESC
-			    )
+                HEAD(
+			        ORDER
+			        (        
+				        " + parameter[0] + @",
+				        [Measures].[Hec Ventas Ventas],
+				        BDESC
+			        ),5
+                )
 		    ON ROWS
 		    FROM
 		    [DWH Northwind]";
