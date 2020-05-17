@@ -187,21 +187,22 @@ namespace API_REST_Northwind.Controllers
         [Route("GetDimensions")]
         public HttpResponseMessage GetDimensions()
         {
-            List<string> labels = new List<string>();
-            List<int> values = new List<int>();
-            labels.Add("Cliente");
-            labels.Add("Empleado");
-            labels.Add("Producto");
-
-            for (int i = 0; i < 3; i++)
+            List<dynamic> result = new List<dynamic>();
+            result.Add(new
             {
-                values.Add(i + 1);
-            }
-            dynamic result = new
+                value = 1,
+                label = "Cliente"
+            });
+            result.Add(new
             {
-                value = values,
-                label = labels
-            };
+                value = 2,
+                label = "Empleado"
+            });
+            result.Add(new
+            {
+                value = 3,
+                label = "Producto"
+            });
             return Request.CreateResponse(HttpStatusCode.OK, (object)result);
         }
 
@@ -242,13 +243,7 @@ namespace API_REST_Northwind.Controllers
 		    FROM
 		    [DWH Northwind]";
 
-            List<string> labels = new List<string>();
-            List<int> values = new List<int>();
-            dynamic result = new
-            {
-                value = values,
-                label = labels
-            };
+            List<dynamic> result = new List<dynamic>();
 
             using (AdomdConnection cnn = new AdomdConnection(ConfigurationManager.ConnectionStrings["CuboNorthwind"].ConnectionString))
             {
@@ -260,12 +255,15 @@ namespace API_REST_Northwind.Controllers
                         int i = 1;
                         while (dr.Read())
                         {
-                            values.Add(i);
-                            labels.Add(dr.GetString(0));
+                            result.Add(new
+                            {
+                                value = i,
+                                label = dr.GetString(0)                               
+                            });
                             i++;
                         }
                         dr.Close();
-                        labels.Sort();
+                        result = result.OrderBy(o => o.label).ToList();
                     }
                 }
             }
@@ -292,14 +290,7 @@ namespace API_REST_Northwind.Controllers
 		    FROM
 		    [DWH Northwind]";
 
-            List<string> labels = new List<string>();
-            List<int> values = new List<int>();
-            dynamic result = new
-            {
-                value = values,
-                label = labels
-            };
-
+            List<dynamic> result = new List<dynamic>();
             using (AdomdConnection cnn = new AdomdConnection(ConfigurationManager.ConnectionStrings["CuboNorthwind"].ConnectionString))
             {
                 cnn.Open();
@@ -310,11 +301,14 @@ namespace API_REST_Northwind.Controllers
                         int i = 1;
                         while (dr.Read())
                         {
-                            values.Add(i);
-                            labels.Add(dr.GetString(0));
+                            result.Add(new
+                            {
+                                value = i,
+                                label = dr.GetString(0)
+                            });                         
                             i++;
                         }
-                        labels.Sort();
+                        result = result.OrderBy(o => o.label).ToList();
                         dr.Close();
                     }
                 }
@@ -369,31 +363,67 @@ namespace API_REST_Northwind.Controllers
             //              }
             //          }
             //      }
-            List<string> labels = new List<string>();
-            List<int> values = new List<int>();
-            labels.Add("Jan");
-            labels.Add("Feb");
-            labels.Add("Mar");
-            labels.Add("Apr");
-            labels.Add("May");
-            labels.Add("Jun");
-            labels.Add("Jul");
-            labels.Add("Aug");
-            labels.Add("Sep");
-            labels.Add("Oct");
-            labels.Add("Nov");
-            labels.Add("Dic");
-
-            for (int i = 0; i < 12; i++)
+            List<dynamic> result = new List<dynamic>();
+            result.Add(new
             {
-                values.Add(i + 1);
-            }
-            dynamic result = new
+                value = 1,
+                label = "Jan"
+            });
+            result.Add(new
             {
-                value = values,
-                label = labels
-            };
-
+                value = 2,
+                label = "Feb"
+            });
+            result.Add(new
+            {
+                value = 3,
+                label = "Mar"
+            });
+            result.Add(new
+            {
+                value = 4,
+                label = "Apr"
+            });
+            result.Add(new
+            {
+                value = 5,
+                label = "May"
+            });
+            result.Add(new
+            {
+                value = 6,
+                label = "Jun"
+            });
+            result.Add(new
+            {
+                value = 7,
+                label = "Jul"
+            });
+            result.Add(new
+            {
+                value = 8,
+                label = "Aug"
+            });
+            result.Add(new
+            {
+                value = 9,
+                label = "Sep"
+            });
+            result.Add(new
+            {
+                value = 10,
+                label = "Oct"
+            });
+            result.Add(new
+            {
+                value = 11,
+                label = "Nov"
+            });
+            result.Add(new
+            {
+                value = 12,
+                label = "Dic"
+            });
             return Request.CreateResponse(HttpStatusCode.OK, (object)result);
         }
     }
