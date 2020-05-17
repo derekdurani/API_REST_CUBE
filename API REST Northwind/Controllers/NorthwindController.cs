@@ -139,7 +139,7 @@ namespace API_REST_Northwind.Controllers
                                     + parameter[0] + @",
 				                    [Measures].[Hec Ventas Ventas],
 				                    DESC
-			                    ),6
+			                    ),5
 		                    )
                         }
                         ON ROWS
@@ -229,21 +229,66 @@ namespace API_REST_Northwind.Controllers
 
 
             string MDX_QUERY = string.Empty;
-            MDX_QUERY = @"
-            SELECT
-			    [Measures].[Hec Ventas Ventas]
-		        ON COLUMNS,
-                HEAD(
-			        ORDER
-			        (        
-				        " + parameter[0] + @",
-				        [Measures].[Hec Ventas Ventas],
-				        BDESC
-			        ),5
-                )
-		    ON ROWS
-		    FROM
-		    [DWH Northwind]";
+            if (parameter[1] == "" && parameter[2] == "")
+            {
+                MDX_QUERY = @"
+                SELECT
+			        [Measures].[Hec Ventas Ventas]
+		            ON COLUMNS,
+                    HEAD(
+			            ORDER
+			            (        
+				            " + parameter[0] + @",
+				            [Measures].[Hec Ventas Ventas],
+				            BDESC
+			            ),5
+                    )
+		        ON ROWS
+		        FROM
+		        [DWH Northwind]";
+            }
+            else if (parameter[1] != "" && parameter[2] == "")
+            {
+                MDX_QUERY = @"
+                    SELECT
+			                    [Dim Tiempo].[Anio].[" + parameter[1] + @"]
+                        ON COLUMNS,
+		                    HEAD(
+			                    ORDER(
+					                    " + parameter[0] + @",
+					                    [Measures].[Hec Ventas Ventas],
+					                    DESC
+				                    ),5
+		                    )
+                        ON ROWS
+	                    FROM
+	                    [DWH Northwind]
+	                    where
+	                    [Measures].[Hec Ventas Ventas]
+                    ";
+            }
+            else
+            {
+                MDX_QUERY = @"
+                    SELECT                      
+                            ([Dim Tiempo].[Anio].[" + parameter[1] + @"], 
+		                    [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])	            
+                        ON COLUMNS,
+		                    HEAD(
+			                    ORDER("
+                                   + parameter[0] + @",
+				                    [Measures].[Hec Ventas Ventas],
+				                    DESC
+			                    ),5
+		                    )
+                        ON ROWS
+	                    FROM
+	                    [DWH Northwind]
+	                    where
+	                    [Measures].[Hec Ventas Ventas]
+                    ";
+            }
+               
 
             List<dynamic> result = new List<dynamic>();
 
