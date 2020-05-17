@@ -205,16 +205,22 @@ namespace API_REST_Northwind.Controllers
             {
                 MDX_QUERY = @"
                 SELECT
-			        [Measures].[Hec Ventas Ventas]
+                    NON EMPTY
+                    {
+			            [Measures].[Hec Ventas Ventas]
+                    }
 		            ON COLUMNS,
-                    HEAD(
-			            ORDER
-			            (        
-				            " + parameter[0] + @",
-				            [Measures].[Hec Ventas Ventas],
-				            DESC
-			            ),5
-                    )
+                    NON EMPTY
+                    {
+                        HEAD(
+			                ORDER
+			                (        
+				                " + parameter[0] + @",
+				                [Measures].[Hec Ventas Ventas],
+				                DESC
+			                ),5
+                        )
+                    }
 		        ON ROWS
 		        FROM
 		        [DWH Northwind]";
@@ -223,8 +229,13 @@ namespace API_REST_Northwind.Controllers
             {
                 MDX_QUERY = @"
                     SELECT
-			                    [Dim Tiempo].[Anio].[" + parameter[1] + @"]
+                        NON EMPTY
+                        {
+			                [Dim Tiempo].[Anio].[" + parameter[1] + @"]
+                        }
                         ON COLUMNS,
+                        NON EMPTY
+                        {
 		                    HEAD(
 			                    ORDER(
 					                    " + parameter[0] + @",
@@ -232,6 +243,7 @@ namespace API_REST_Northwind.Controllers
 					                    DESC
 				                    ),5
 		                    )
+                        }
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
@@ -242,17 +254,23 @@ namespace API_REST_Northwind.Controllers
             else
             {
                 MDX_QUERY = @"
-                    SELECT                      
-                        ([Dim Tiempo].[Anio].[" + parameter[1] + @"], 
-		                [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])	            
+                    SELECT
+                        NON EMPTY
+                        {
+                            ([Dim Tiempo].[Anio].[" + parameter[1] + @"], 
+		                    [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])
+                        }
                         ON COLUMNS,
-		                HEAD(
-			                ORDER("
-                                + parameter[0] + @",
-				                [Measures].[Hec Ventas Ventas],
-				                DESC
-			                ),5
-		                )
+                        NON EMPTY
+                        {
+		                    HEAD(
+			                    ORDER("
+                                    + parameter[0] + @",
+				                    [Measures].[Hec Ventas Ventas],
+				                    DESC
+			                    ),5
+		                    )
+                        }
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
