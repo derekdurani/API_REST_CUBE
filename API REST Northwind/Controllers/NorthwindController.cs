@@ -212,7 +212,7 @@ namespace API_REST_Northwind.Controllers
 				                " + parameter[0] + @",
 				                [Measures].[Hec Ventas Ventas],
 				                DESC
-			                ),5
+			                ),"+parameter[3]+@"
                         )
                     }
 		        ON ROWS
@@ -235,7 +235,7 @@ namespace API_REST_Northwind.Controllers
 					                    " + parameter[0] + @",
 					                    [Measures].[Hec Ventas Ventas],
 					                    DESC
-				                    ),5
+				                    ),"+parameter[3]+@"
 		                    )
                         }
                         ON ROWS
@@ -262,7 +262,7 @@ namespace API_REST_Northwind.Controllers
                                     + parameter[0] + @",
 				                    [Measures].[Hec Ventas Ventas],
 				                    DESC
-			                    ),5
+			                    ),"+parameter[3]+@"
 		                    )
                         }
                         ON ROWS
@@ -363,7 +363,6 @@ namespace API_REST_Northwind.Controllers
         }
 
         //Bar Graphic
-        //
         [HttpPost]
         [Route("GetHistogram")]
         public HttpResponseMessage GetHistogram([FromBody]List<string[]> parameter)
