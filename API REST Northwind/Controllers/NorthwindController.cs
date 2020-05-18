@@ -195,33 +195,35 @@ namespace API_REST_Northwind.Controllers
 
 
             string MDX_QUERY = string.Empty;
-            if (parameter[1] == "" && parameter[2] == "")
+            if(parameter[3] != "")
             {
-                MDX_QUERY = @"
-                SELECT
-                    NON EMPTY
-                    {
-			            [Measures].[Hec Ventas Ventas]
-                    }
-		            ON COLUMNS,
-                    NON EMPTY
-                    {
-                        HEAD(
-			                ORDER
-			                (        
-				                " + parameter[0] + @",
-				                [Measures].[Hec Ventas Ventas],
-				                DESC
-			                ),"+parameter[3]+@"
-                        )
-                    }
-		        ON ROWS
-		        FROM
-		        [DWH Northwind]";
-            }
-            else if (parameter[1] != "" && parameter[2] == "")
-            {
-                MDX_QUERY = @"
+                if (parameter[1] == "" && parameter[2] == "")
+                {
+                    MDX_QUERY = @"
+                    SELECT
+                        NON EMPTY
+                        {
+			                [Measures].[Hec Ventas Ventas]
+                        }
+		                ON COLUMNS,
+                        NON EMPTY
+                        {
+                            HEAD(
+			                    ORDER
+			                    (        
+				                    " + parameter[0] + @",
+				                    [Measures].[Hec Ventas Ventas],
+				                    DESC
+			                    )," + parameter[3] + @"
+                            )
+                        }
+		            ON ROWS
+		            FROM
+		            [DWH Northwind]";
+                }
+                else if (parameter[1] != "" && parameter[2] == "")
+                {
+                    MDX_QUERY = @"
                     SELECT
                         NON EMPTY
                         {
@@ -235,7 +237,7 @@ namespace API_REST_Northwind.Controllers
 					                    " + parameter[0] + @",
 					                    [Measures].[Hec Ventas Ventas],
 					                    DESC
-				                    ),"+parameter[3]+@"
+				                    )," + parameter[3] + @"
 		                    )
                         }
                         ON ROWS
@@ -244,10 +246,10 @@ namespace API_REST_Northwind.Controllers
 	                    where
 	                    [Measures].[Hec Ventas Ventas]
                     ";
-            }
-            else
-            {
-                MDX_QUERY = @"
+                }
+                else
+                {
+                    MDX_QUERY = @"
                     SELECT
                         NON EMPTY
                         {
@@ -259,10 +261,10 @@ namespace API_REST_Northwind.Controllers
                         {
 		                    HEAD(
 			                    ORDER("
-                                    + parameter[0] + @",
+                                        + parameter[0] + @",
 				                    [Measures].[Hec Ventas Ventas],
 				                    DESC
-			                    ),"+parameter[3]+@"
+			                    )," + parameter[3] + @"
 		                    )
                         }
                         ON ROWS
@@ -271,7 +273,83 @@ namespace API_REST_Northwind.Controllers
 	                    WHERE
                         [measures].[hec ventas ventas]
                     ";
+                }
             }
+            else
+            {
+                if (parameter[1] == "" && parameter[2] == "")
+                {
+                    MDX_QUERY = @"
+                    SELECT
+                        NON EMPTY
+                        {
+			                [Measures].[Hec Ventas Ventas]
+                        }
+		                ON COLUMNS,
+                        NON EMPTY
+                        {
+			                ORDER
+			                (        
+				                " + parameter[0] + @",
+				                [Measures].[Hec Ventas Ventas],
+				                DESC
+			                )
+                        }
+		            ON ROWS
+		            FROM
+		            [DWH Northwind]";
+                }
+                else if (parameter[1] != "" && parameter[2] == "")
+                {
+                    MDX_QUERY = @"
+                    SELECT
+                        NON EMPTY
+                        {
+			                [Dim Tiempo].[Anio].[" + parameter[1] + @"]
+                        }
+                        ON COLUMNS,
+                        NON EMPTY
+                        {
+			                ORDER(
+					                " + parameter[0] + @",
+					                [Measures].[Hec Ventas Ventas],
+					                DESC
+				                )
+                        }
+                        ON ROWS
+	                    FROM
+	                    [DWH Northwind]
+	                    where
+	                    [Measures].[Hec Ventas Ventas]
+                    ";
+                }
+                else
+                {
+                    MDX_QUERY = @"
+                    SELECT
+                        NON EMPTY
+                        {
+                            ([Dim Tiempo].[Anio].[" + parameter[1] + @"], 
+		                    [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])
+                        }
+                        ON COLUMNS,
+                        NON EMPTY
+                        {
+			                ORDER("
+                                    + parameter[0] + @",
+				                [Measures].[Hec Ventas Ventas],
+				                DESC
+			                )
+                        }
+                        ON ROWS
+	                    FROM
+	                    [DWH Northwind]
+	                    WHERE
+                        [measures].[hec ventas ventas]
+                    ";
+                }
+            }
+           
                
 
             List<string> result = new List<string>();
