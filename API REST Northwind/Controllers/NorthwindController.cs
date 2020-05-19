@@ -255,8 +255,7 @@ namespace API_REST_Northwind.Controllers
 		                    [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])
                         }
                         ON COLUMNS,
-                        NON EMPTY
-                        {
+
 		                    HEAD(
 			                    ORDER("
                                         + parameter[0] + @",
@@ -264,7 +263,6 @@ namespace API_REST_Northwind.Controllers
 				                    DESC
 			                    )," + parameter[3] + @"
 		                    )
-                        }
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
@@ -327,14 +325,12 @@ namespace API_REST_Northwind.Controllers
 		                    [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])
                         }
                         ON COLUMNS,
-                        NON EMPTY
-                        {
+
 			                ORDER("
                                     + parameter[0] + @",
 				                [Measures].[Hec Ventas Ventas],
 				                DESC
 			                )
-                        }
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
@@ -356,10 +352,7 @@ namespace API_REST_Northwind.Controllers
                         while (dr.Read())
                         {
                             Debug.Write(dr);
-                            if  (dr.GetValue(1) == null)
-                                break;
-                            else
-                                result.Add(dr.GetString(0));
+                            result.Add(dr.GetString(0));
                         }
                         dr.Close();
                         result = result.OrderBy(o => o).ToList();
