@@ -144,8 +144,11 @@ namespace API_REST_Northwind.Controllers
                                 clients.Add(dr.GetString(0));
                                 sales.Add(0);
                             }
-                            clients.Add(dr.GetString(0));
-                            sales.Add(Math.Round(dr.GetDecimal(1)));
+                            else
+                            {
+                                clients.Add(dr.GetString(0));
+                                sales.Add(Math.Round(dr.GetDecimal(1)));
+                            }
                         }
                         dr.Close();
                     }
