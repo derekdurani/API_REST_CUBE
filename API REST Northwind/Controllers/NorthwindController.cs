@@ -93,8 +93,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
                     ";
             }
             else
@@ -108,21 +106,16 @@ namespace API_REST_Northwind.Controllers
 		                    [Dim Tiempo].[Numero Mes].[" + parameter[2] + @"])	            
 	                    }
                         ON COLUMNS,
-                        NON EMPTY
-                        {	
-		                    HEAD(
+                        HEAD(
 			                    ORDER("
                                     + parameter[0] + @",
 				                    [Measures].[Hec Ventas Ventas],
 				                    DESC
 			                    ),5
-		                    )
-                        }
+                        )
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
                     ";
             }
             Debug.Write(parameter);
@@ -146,7 +139,11 @@ namespace API_REST_Northwind.Controllers
                     {
                         while (dr.Read())
                         {
-
+                            if(dr.GetValue(1) == null)
+                            {
+                                clients.Add(dr.GetString(0));
+                                sales.Add(0);
+                            }
                             clients.Add(dr.GetString(0));
                             sales.Add(Math.Round(dr.GetDecimal(1)));
                         }
@@ -243,8 +240,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
                     ";
                 }
                 else
@@ -270,8 +265,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    WHERE
-                        [measures].[hec ventas ventas]
                     ";
                 }
             }
@@ -319,8 +312,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
                     ";
                 }
                 else
@@ -344,8 +335,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    WHERE
-                        [measures].[hec ventas ventas]
                     ";
                 }
             }
@@ -491,8 +480,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
                     ";
 
                     validate = "añossinitems";
@@ -518,8 +505,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
                     ";
                     validate = "añosinitems";
                 }
@@ -545,8 +530,6 @@ namespace API_REST_Northwind.Controllers
                         ON ROWS
 	                    FROM
 	                    [DWH Northwind]
-	                    where
-	                    [Measures].[Hec Ventas Ventas]
                     ";
                     validate = "añomessinitems";
                 }
@@ -604,8 +587,6 @@ namespace API_REST_Northwind.Controllers
                             ON ROWS
 	                        FROM
 	                        [DWH Northwind]
-	                        where
-	                        [Measures].[Hec Ventas Ventas]
                     ";
                     validate = "añosconitems";
                 }
@@ -635,8 +616,6 @@ namespace API_REST_Northwind.Controllers
                             ON ROWS
 	                        FROM
 	                        [DWH Northwind]
-	                        where
-	                        [Measures].[Hec Ventas Ventas]
                     ";
                     validate = "añoconitems";
                 }
@@ -667,8 +646,6 @@ namespace API_REST_Northwind.Controllers
                             ON ROWS
 	                        FROM
 	                        [DWH Northwind]
-	                        where
-	                        [Measures].[Hec Ventas Ventas]
                     ";
                     validate = "añomesconitems";
                 }
